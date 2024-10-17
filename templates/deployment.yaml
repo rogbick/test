@@ -22,21 +22,13 @@ spec:
         - containerPort: 53
           protocol: UDP       
         volumeMounts:
-          - name: bind-config
-            mountPath: /etc/bind
-          - name: bind-zone-config
-            mountPath: /var/lib/bind
-      volumes:
-        - name: bind-config
-          configMap:
-            name: bind-config
-            items:
-              - key: named.conf
-                path: named.conf
         - name: bind-zone-config
-          configMap:
-            name: bind-zone-config
+          mountPath: /var/lib/bind
+      volumes:
+      - name: bind-zone-config
+        configMap:
+          name: bind-zone-config
             zoneconfigs:
-              items:                 
-                - key: c00lz0ne.internal
-                  path: c00lz0ne.internal
+            items:                 
+            - key: c00lz0ne.internal
+              path: c00lz0ne.internal
