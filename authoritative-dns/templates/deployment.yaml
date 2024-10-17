@@ -1,52 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.name }}
+  name: bind-deployment
   labels:
-    {{- include "authoritative-dns.selectorLabels" . | nindent 4 }}
+    app: bind
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      {{- include "authoritative-dns.selectorLabels" . | nindent 6 }}
+      app: bind
   template:
     metadata:
-      roll: {{ randAlphaNum 5 | quote }}
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "authoritative-dns.selectorLabels" . | nindent 8 }}
+        app: bind
     spec:
-      hostNetwork: true
-      affinity:
-        {{- toYaml .Values.affinity | nindent 8 }}
       containers:
-        - name: {{ .Values.name }}-bind
-          image: {{ .Values.image.image }}:{{ .Values.image.tag }}
-          imagePullPolicy: IfNotPresent
-          ports:
-            - name: dns-tcp
-              containerPort: {{ .Values.service.targetPort }}
-              protocol: TCP
-            - name: dns-udp
-              containerPort: {{ .Values.service.targetPort }}
-              protocol: UDP
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
-            tcpSocket:
-              port: dns-tcp
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          livenessProbe:
-            tcpSocket:
-              port: dns-udp
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          {{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-{{- toYaml .Values.zoneconfigs | nindent 12 }}
+      - name: bind
+        image: internetsystemsconsortium/bind9:9.20
+          pullPolicy: IfNotPresent
+        env:
+        - name: DOCKER_LOGS
+          value: 1
+        - name: ALLOW_QUERY
+          value: any
+        ports:
+        - containerPort: 53
