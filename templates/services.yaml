@@ -16,14 +16,3 @@ spec:
     port: 5353
     targetPort: 53
     name: bind9
-    volumeMounts:
-        - name: bind-zone-config
-          mountPath: /var/lib/bind
-volumes:
-  - name: bind-zone-config
-  configMap:
-    name: bind-zone-config
-    zoneconfigs:
-      items:                 
-        - key: c00lz0ne.internal
-          path: c00lz0ne.internal
