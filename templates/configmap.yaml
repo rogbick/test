@@ -3,7 +3,33 @@ kind: ConfigMap
 metadata:
   name: bind-config
 data:
-{{- toYaml .Values.bindconfig | nindent 2 }}
+  bindconfig:
+    named.conf: |
+      options {
+              directory "/var/cache/bind";
+              listen-on port 53 { any; };
+              auth-nxdomain yes;
+              forwarders { 
+                      1.1.1.1; 
+                      1.0.0.1; 
+              };
+              listen-on-v6 { ::1; };
+              allow-recursion {
+                      none;
+              };
+              allow-transfer {
+                      none;
+              };
+              allow-update {
+                      none;
+              };
+      };
+
+      zone "c00lz0ne.internal" {
+        type master;
+        file "/var/lib/bind/c00lz0ne.internal";
+      };
+
 ---
 apiVersion: v1
 kind: ConfigMap
