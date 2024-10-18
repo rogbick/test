@@ -50,19 +50,26 @@ metadata:
   name: bind-zone-config
 data:
   bindzones:
-    c00lz0ne.internal: |
-      $TTL    604800
-      @       IN      SOA     ns1.c00lz0ne.internal. admin.c00lz0ne.internal. (
-                                    5         ; Serial
-                               604800         ; Refresh
-                                86400         ; Retry
-                              2419200         ; Expire
-                               604800 )       ; Negative Cache TTL
-      ;
-      c00lz0ne.internal.       IN      NS      ns1.c00lz0ne.internal.
-      c00lz0ne.internal.       IN      NS      ns2.c00lz0ne.internal.
-      ns1                      IN      A       10.24.0.11
-      ns2                      IN      A       10.24.0.12
-      rke00.mgr                IN      A       10.24.0.99
-      rke01.mgr                IN      A       10.24.0.100
-      rke-lb.mgr               IN      A       100.69.29.9
+    tridentcloud.dev: |
+      $ORIGIN .
+      $TTL 604800     ; 1 week
+      tridentcloud.dev        IN SOA  sandbox-bind.tridentcloud.dev. admin.tridentcloud.dev. (
+                                7          ; serial
+                                604800     ; refresh (1 week)
+                                86400      ; retry (1 day)
+                                2419200    ; expire (4 weeks)
+                                604800     ; minimum (1 week)
+                                )
+                        NS      sandbox-bind.tridentcloud.dev.
+      $ORIGIN tridentcloud.dev.
+      $TTL 0  ; 0 seconds
+      a-testpage              TXT     "heritage=external-dns,external-dns/owner=default,external-dns/resource=ingress/default/testpage"
+      external-dns-a-webpage22 TXT    "heritage=external-dns,external-dns/owner=k8s,external-dns/resource=service/default/webpage22"
+      external-dns-webpage22  TXT     "heritage=external-dns,external-dns/owner=k8s,external-dns/resource=service/default/webpage22"
+      $TTL 604800     ; 1 week
+      sandbox-bind            A       10.55.12.174
+      sandbox-vm              A       10.55.12.189
+      $TTL 0  ; 0 seconds
+      testpage                A       10.55.12.104
+                              TXT     "heritage=external-dns,external-dns/owner=default,external-dns/resource=ingress/default/testpage"
+      webpage22               A       10.55.12.225
