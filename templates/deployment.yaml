@@ -37,5 +37,5 @@ spec:
           configMap:
             name: bind-zone-config
             items:                 
-              - key: c00lz0ne.internal
-                path: c00lz0ne.internal
+              - key: tridentcloud.dev
+                path: tridentdev.cloud
