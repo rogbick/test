@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: bind9
-        image: ubuntu/bind9:9.18-22.04_beta
+        image: internetsystemsconsortium/bind9:9.20
         env:
         ports:
         - containerPort: 53
