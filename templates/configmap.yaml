@@ -35,7 +35,7 @@ data:
 
     zone "tridentcloud.dev" {
         type primary;
-        file "/etc/bind/zones.tridentcloud.dev";
+        file "/var/lib/bind/tridentcloud.dev";
         allow-transfer {
             key "externaldns";
         };
