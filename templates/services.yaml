@@ -5,6 +5,7 @@ metadata:
   labels:
     app: bind9
 spec:
+  type: LoadBalancer
   selector:
     app: bind9
   ports:
@@ -15,4 +16,4 @@ spec:
   - protocol: UDP
     port: 5353
     targetPort: 53
-    name: bind9
+    name: bind9-udp
