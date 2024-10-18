@@ -43,7 +43,7 @@ bindconfig:
       file "/var/lib/bind/c00lz0ne.internal";
     };
 
-#zoneconfigs:
-#  items:                 
- # - key: c00lz0ne.internal
- #   path: c00lz0ne.internal
+zoneconfigs:
+  items:                 
+  - key: c00lz0ne.internal
+    path: c00lz0ne.internal
