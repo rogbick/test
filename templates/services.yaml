@@ -5,7 +5,7 @@ metadata:
   labels:
     app: bind9
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: bind9
   ports:
