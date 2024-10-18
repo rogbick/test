@@ -63,13 +63,3 @@ data:
                         NS      sandbox-bind.tridentcloud.dev.
       $ORIGIN tridentcloud.dev.
       $TTL 0  ; 0 seconds
-      a-testpage              TXT     "heritage=external-dns,external-dns/owner=default,external-dns/resource=ingress/default/testpage"
-      external-dns-a-webpage22 TXT    "heritage=external-dns,external-dns/owner=k8s,external-dns/resource=service/default/webpage22"
-      external-dns-webpage22  TXT     "heritage=external-dns,external-dns/owner=k8s,external-dns/resource=service/default/webpage22"
-      $TTL 604800     ; 1 week
-      sandbox-bind            A       10.55.12.174
-      sandbox-vm              A       10.55.12.189
-      $TTL 0  ; 0 seconds
-      testpage                A       10.55.12.104
-                              TXT     "heritage=external-dns,external-dns/owner=default,external-dns/resource=ingress/default/testpage"
-      webpage22               A       10.55.12.225
