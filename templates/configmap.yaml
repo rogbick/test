@@ -28,19 +28,19 @@ data:
             };
     };
 
-    key "externaldns" {
+    key "external-dns" {
         algorithm hmac-sha256;
-        secret "g3+uS+rPS9bBnRtGmUfpXWxIL+KDCTCJKD+Jhiuo8H8=";
+        secret "35q4TsqlCbgN1ybHfg+rf0ahSidnoDiEfQPr+9M4jEg=";
     };
 
     zone "tridentcloud.dev" {
         type primary;
         file "/var/lib/bind/tridentcloud.dev";
         allow-transfer {
-            key "externaldns";
+            key "external-dns";
         };
         update-policy {
-            grant externaldns zonesub ANY;
+            grant external-dns zonesub ANY;
         };
     };
 ---
