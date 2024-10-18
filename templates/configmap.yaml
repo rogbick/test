@@ -59,6 +59,6 @@ data:
                                 2419200    ; expire (4 weeks)
                                 604800     ; minimum (1 week)
                                 )
-                              NS      sandbox-bind.tridentcloud.dev.
-      sandbox-bind            A       10.55.12.219
+                              IN NS      sandbox-bind.tridentcloud.dev.
+      sandbox-bind            IN A       10.55.12.219
       
