@@ -4,6 +4,9 @@ metadata:
   name: bind-config
 data:
   named.conf: |
+
+    include "/tmp/tridentcloud.dev"
+  
     acl "trusted" {
         10.55.12.0/24;
     };
@@ -35,7 +38,7 @@ data:
 
     zone "tridentcloud.dev" {
         type primary;
-        file "/var/lib/bind/tridentcloud.dev";
+        file "/tmp/tridentcloud.dev";
         allow-transfer {
             key "external-dns";
         };
@@ -43,23 +46,3 @@ data:
             grant external-dns zonesub ANY;
         };
     };
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: bind-zone-config
-data:
-  tridentcloud.dev: |
-      $TTL 604800     ; 1 week
-      $ORIGIN tridentcloud.dev.
-      @        IN   SOA  sandbox-bind.tridentcloud.dev. admin.tridentcloud.dev. (
-                                    8          ; serial
-                                    604800     ; refresh (1 week)
-                                    86400      ; retry (1 day)
-                                    2419200    ; expire (4 weeks)
-                                    604800     ; minimum (1 week)
-                                    )
-                              IN   NS      sandbox-bind.tridentcloud.dev.
-      sandbox-bind            IN   A       10.55.12.214
-      sandbox-test            IN   A       10.55.12.219
-      
