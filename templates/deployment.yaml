@@ -38,4 +38,4 @@ spec:
             name: bind-zone-config
             items:                 
               - key: tridentcloud.dev
-                path: tridentdev.cloud
+                path: tridentcloud.dev
