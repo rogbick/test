@@ -24,8 +24,8 @@ spec:
         volumeMounts:
         - name: bind-config
           mountPath: /etc/bind
-##        - name: bind-zone-config
-##          mountPath: /var/lib/bind
+        - name: bind-zone-config
+          mountPath: /var/lib/bind
       volumes:
         - name: bind-config
           configMap:
@@ -33,9 +33,9 @@ spec:
             items:
               - key: named.conf
                 path: named.conf
- ##       - name: bind-zone-config
- ##         configMap:
- ##           name: bind-zone-config
- ##           items:                 
- ##             - key: tridentcloud.dev
-  ##              path: tridentcloud.dev
+        - name: bind-zone-config
+          configMap:
+            name: bind-zone-config
+            items:                 
+              - key: tridentcloud.dev
+                path: tridentcloud.dev
