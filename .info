@@ -1,0 +1,159 @@
+external-dns / bind
+
+tsig-keygen -a hmac-sha256 external-dns
+key "external-dns" {
+        algorithm hmac-sha256;
+        secret "35q4TsqlCbgN1ybHfg+rf0ahSidnoDiEfQPr+9M4jEg=";
+};
+
+
+mkdir /var/log/named
+
+
+zones.10.55
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     sandbox-bind.tridentcloud.dev. admin.tridentcloud.dev. (
+                              5         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+        IN      NS      sandbox-bind.tridentcloud.dev.
+
+174.12  IN   PTR   sandbox-bind.tridentcloude.dev.
+189.12  IN   PTR   sandbox-vm.tridentcloud.dev.
+
+
+named.conf.options
+acl "trusted" {
+        10.55.12.0/24;
+};
+
+options {
+        directory "/var/cache/bind";
+
+        recursion yes;
+        allow-recursion { trusted; };
+        listen-on { 10.55.12.174; };
+        allow-transfer { none; };
+
+
+        // If there is a firewall between you and nameservers you want
+        // to talk to, you may need to fix the firewall to allow multiple
+        // ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+
+        // If your ISP provided one or more IP addresses for stable
+        // nameservers, you probably want to use them as forwarders.
+        // Uncomment the following block, and insert the addresses replacing
+        // the all-0's placeholder.
+
+        // forwarders {
+        //      0.0.0.0;
+        // };
+
+        //========================================================================
+        // If BIND logs error messages about the root key being expired,
+        // you will need to update your keys.  See https://www.isc.org/bind-keys
+        //========================================================================
+        dnssec-validation auto;
+
+        listen-on-v6 { any; };
+};
+
+logging {
+        channel default_log {
+                file "/var/log/named/bind.log";
+                print-time yes;
+                print-category yes;
+                print-severity yes;
+                severity info;
+        };
+
+        category client { default_log; };
+        category default { default_log; };
+        category queries { default_log; };
+};
+
+
+named.conf.local
+//
+// Do any local configuration here
+//
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+//include /etc/bind/zones.tridentcloud.dev
+
+key "externaldns" {
+        algorithm hmac-sha256;
+        secret "g3+uS+rPS9bBnRtGmUfpXWxIL+KDCTCJKD+Jhiuo8H8=";
+};
+
+zone "tridentcloud.dev" {
+    type primary;
+    file "/etc/bind/zones.tridentcloud.dev";
+    allow-transfer {
+        key "externaldns";
+    };
+    update-policy {
+        grant externaldns zonesub ANY;
+    };
+};
+
+zone "55.10.in-addr.arpa" {
+    type primary;
+    file "/etc/bind/zones.10.55";
+};
+
+zones.tridentcloud.dev
+$ORIGIN .
+$TTL 604800     ; 1 week
+tridentcloud.dev        IN SOA  sandbox-bind.tridentcloud.dev. admin.tridentcloud.dev. (
+                                7          ; serial
+                                604800     ; refresh (1 week)
+                                86400      ; retry (1 day)
+                                2419200    ; expire (4 weeks)
+                                604800     ; minimum (1 week)
+                                )
+                        NS      sandbox-bind.tridentcloud.dev.
+$ORIGIN tridentcloud.dev.
+$TTL 0  ; 0 seconds
+a-testpage              TXT     "heritage=external-dns,external-dns/owner=default,external-dns/resource=ingress/default/testpage"
+external-dns-a-webpage22 TXT    "heritage=external-dns,external-dns/owner=k8s,external-dns/resource=service/default/webpage22"
+external-dns-webpage22  TXT     "heritage=external-dns,external-dns/owner=k8s,external-dns/resource=service/default/webpage22"
+$TTL 604800     ; 1 week
+sandbox-bind            A       10.55.12.174
+sandbox-vm              A       10.55.12.189
+$TTL 0  ; 0 seconds
+testpage                A       10.55.12.104
+                        TXT     "heritage=external-dns,external-dns/owner=default,external-dns/resource=ingress/default/testpage"
+webpage22               A       10.55.12.225
+
+
+
+configmap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bind-zone-config
+data:
+  tridentcloud.dev: |
+      $TTL 604800     ; 1 week
+      $ORIGIN tridentcloud.dev.
+      @        IN   SOA  sandbox-bind.tridentcloud.dev. admin.tridentcloud.dev. (
+                                    8          ; serial
+                                    604800     ; refresh (1 week)
+                                    86400      ; retry (1 day)
+                                    2419200    ; expire (4 weeks)
+                                    604800     ; minimum (1 week)
+                                    )
+                              IN   NS      sandbox-bind.tridentcloud.dev.
+      sandbox-bind            IN   A       10.55.12.214
+      sandbox-test            IN   A       10.55.12.219
+      
