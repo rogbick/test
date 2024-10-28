@@ -1,19 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bind9-deployment
+  name: bind9
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: bind9
   template:
     spec:
       containers:
       - name: bind9
         image: internetsystemsconsortium/bind9:9.20
         imagePullPolicy: IfNotPresent
-        env:
         ports:
         - containerPort: 53
           protocol: TCP
