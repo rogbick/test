@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: bind9-service
   labels:
-    app: bind9
+    app: bind
 spec:
   type: LoadBalancer
   selector:
-    app: bind9
+    app: bind
   ports:
   - protocol: TCP
     port: 53
