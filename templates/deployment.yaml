@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bind9
+  name: bind
 spec:
   replicas: 1
   selector:
     matchLabels: 
-      app: bind9
+      app: bind
   template:
     metadata:
       labels: 
-        app: bind9
+        app: bind
     spec:
       containers:
-      - name: bind9
+      - name: bind
         image: internetsystemsconsortium/bind9:9.20
         imagePullPolicy: IfNotPresent
         ports:
