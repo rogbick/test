@@ -2,14 +2,15 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bind9
-  labels: bind9
 spec:
   replicas: 1
   selector:
-    matchLabels: bind9
+    matchLabels: 
+      app: bind9
   template:
     metadata:
-      labels: bind9
+      labels: 
+        app: bind9
     spec:
       containers:
       - name: bind9
